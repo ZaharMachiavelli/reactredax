@@ -1,26 +1,26 @@
 import React from "react";
 import Clock from "./Clock.js";
-import Redaction from "./Redaction.js";
+import Dataeditor from "./Dataeditor.js";
 
 function NewPage(props) {
   if (props.cons)
     return (
       <Clock
-        ButtonClick={props.ButtonClick}
-        value={props.value}
-        yearvalue={props.yearvalue}
-        monthvalue={props.monthvalue}
-        letchange={props.letchange}
+        editClick={props.editClick}
+        dayValue={props.dayValue}
+        yearValue={props.yearValue}
+        monthValue={props.monthValue}
+        isDateEditing={props.isDateEditing}
       />
     );
   else
     return (
-      <Redaction
-        value={props.value}
-        monthvalue={props.monthvalue}
-        yearvalue={props.yearvalue}
+      <Dataeditor
+        dayValue={props.dayValue}
+        monthValue={props.monthValue}
+        yearValue={props.yearValue}
         ValueChange={props.ValueChange}
-        ButtonClick={props.ButtonClick}
+        editClick={props.editClick}
         SaveData={props.DataSave}
       />
     );
@@ -31,46 +31,38 @@ class MainPage extends React.Component {
     super(props);
     this.state = {
       clicked: true,
-      text: "Редактировать",
-      value: "",
-      yearvalue: "",
-      monthvalue: "0",
-      letchange: false,
+      dayValue: "",
+      yearValue: "",
+      monthValue: "0",
+      isDateEditing: false,
     };
-    this.ButtonClick = this.ButtonClick.bind(this);
+    this.editClick = this.editClick.bind(this);
     this.ValueChange = this.ValueChange.bind(this);
     this.DataSave = this.DataSave.bind(this);
   }
 
-  ButtonClick() {
+  editClick() {
     this.setState(function (state, props) {
       return {
+        dayValue : "",
+        yearValue: "",
+        monthValue:"0",
         clicked: !state.clicked,
-        letchange: false,
+        isDateEditing: false,
       };
     });
   }
 
   DataSave() {
     this.setState({
-      letchange: true,
+      isDateEditing: true,
       clicked: !this.state.clicked,
     });
-    console.log(this.state.letchange);
+    
   }
 
   ValueChange(dataname, datavalue) {
-    if (dataname == "day") {
-      this.setState({ value: datavalue });
-      
-    }
-    if (dataname == "months") {
-      this.setState({ monthvalue: datavalue });
-    }
-    if (dataname == "year") {
-      this.setState({ yearvalue: datavalue });
-      
-    }
+    this.setState({[dataname]:datavalue});
   }
 
   render() {
@@ -78,13 +70,13 @@ class MainPage extends React.Component {
       <div>
         <NewPage
           cons={this.state.clicked}
-          value={this.state.value}
-          monthvalue={this.state.monthvalue}
-          yearvalue={this.state.yearvalue}
+          dayValue={this.state.dayValue}
+          monthValue={this.state.monthValue}
+          yearValue={this.state.yearValue}
           ValueChange={this.ValueChange}
-          ButtonClick={this.ButtonClick}
+          editClick={this.editClick}
           DataSave={this.DataSave}
-          letchange={this.state.letchange}
+          isDateEditing={this.state.isDateEditing}
         />
       </div>
     );

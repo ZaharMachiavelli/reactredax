@@ -5,9 +5,9 @@ class Clock extends React.Component {
     super(props);
     this.state = { date: this.DataCheck() };
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.text = this.state.date.toLocaleTimeString();
+    this.text = this.state.date.toLocaleString();
     this.checked = false;
-    this.ButClick = this.ButClick.bind(this);
+    this.editDataClick = this.editDataClick.bind(this);
     this.DataCheck = this.DataCheck.bind(this);
     this.InputCoreect = this.InputCoreect.bind(this);
   }
@@ -15,9 +15,9 @@ class Clock extends React.Component {
   DataCheck() {
     if (this.InputCoreect()) {
       return new Date(
-        Number.parseInt(this.props.yearvalue),
-        Number.parseInt(this.props.monthvalue),
-        Number.parseInt(this.props.value) + 1
+        Number.parseInt(this.props.yearValue),
+        Number.parseInt(this.props.monthValue),
+        Number.parseInt(this.props.dayValue),23,0,0
       );
     } else {
       return new Date();
@@ -26,35 +26,33 @@ class Clock extends React.Component {
 
   InputCoreect() {
     if (
-      !Number.isNaN(this.props.value) &&
-      this.props.monthvalue != "" &&
+      !Number.isNaN(this.props.dayValue) &&
+      this.props.monthValue != "" &&
       !Number.isNaN(this.props.yearvalue) &&
-      this.props.value != "" &&
-      this.props.yearvalue != "" &&
-      this.props.letchange
+      this.props.dayValue != "" &&
+      this.props.yearValue != "" &&
+      this.props.isDateEditing
     ) {
-      console.log("Я здесь");
       if (
-        ["0", "2", "4", "6", "7", "9", "11"].indexOf(this.props.monthvalue) !=
+        ["0", "2", "4", "6", "7", "9", "11"].indexOf(this.props.monthValue) !=
           -1 &&
-        Number.parseInt(this.props.value) < 32 &&
-        Number.parseInt(this.props.value) > 0
+        Number.parseInt(this.props.dayValue) < 32 &&
+        Number.parseInt(this.props.dayValue) > 0
       )
         return true;
       if (
-        ["3", "5", "8", "10"].indexOf(this.props.monthvalue) != -1 &&
-        Number.parseInt(this.props.value) < 31 &&
-        Number.parseInt(this.props.value) > 0
+        ["3", "5", "8", "10"].indexOf(this.props.monthValue) != -1 &&
+        Number.parseInt(this.props.dayValue) < 31 &&
+        Number.parseInt(this.props.dayValue) > 0
       )
         return true;
       if (
-        this.props.monthvalue == "1" &&
-        Number.parseInt(this.props.value) < 29 &&
-        Number.parseInt(this.props.value) > 0
+        this.props.monthValue == "1" &&
+        Number.parseInt(this.props.dayValue) < 29 &&
+        Number.parseInt(this.props.dayValue) > 0
       )
         return true;
     }
-    console.log("тута+здеся");
     return false;
   }
 
@@ -65,13 +63,13 @@ class Clock extends React.Component {
     this.Checker(this.checked);
   }
 
-  ButClick() {
-    this.props.ButtonClick();
+  editDataClick() {
+    this.props.editClick();
   }
 
   Checker(check) {
     if (check) this.text = this.state.date.toUTCString();
-    else this.text = this.state.date.toLocaleTimeString();
+    else this.text = this.state.date.toLocaleString();
   }
 
   render() {
@@ -88,7 +86,7 @@ class Clock extends React.Component {
           />
         </label>
         <div>
-          <button onClick={this.ButClick}>Редактировать</button>
+          <button onClick={this.editDataClick}>Редактировать</button>
         </div>
       </div>
     );
